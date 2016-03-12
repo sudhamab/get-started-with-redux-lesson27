@@ -140,43 +140,31 @@ const Todo = ({
   </li>
 );
 
-
-/*
-**
-*/ 
-
-const mapStateToProps = ( state ) = > {
+const mapStateToProps = (state) => {
   return {
     todos: getVisibleTodos(
-        state.todos,
-        state.visibilityFilter
-      )    
+      state.todos,
+      state.visibilityFilter
+    )
   };
 };
 
-const mapDispatchToProps = ( dispatch ) => {
-  return { 
+
+const mapDispatchToProps = (dispatch) => {
+  return {
     onTodoClick: (id) => {
-      store.dispatch({
+      dispatch({
         type: 'TOGGLE_TODO',
-        id 
+        id
       })
     }
   };
 };
 
-/*
-** This is where the brilliance is 
-** The react-redux connect allows you to link 
-** the props and the dispatchers you need to link to 
-** to a component and you dont need to specify the 
-** contextTypes etc.
-*/ 
 const VisibleTodoList = connect(
   mapStateToProps, 
   mapDispatchToProps
 )(TodoList);
-
 
 
 /*

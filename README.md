@@ -36,14 +36,14 @@ This lesson is brilliant because it ties back to simplify everything.
 * Hence, we started passing down the store as props through each layer 
  and some intermediate layers which didn't even need to know about the props were having to accept
  and passdown the store as props. 
- * To circumvent this, we started using contexts, and then finally Providers which allowed us to 
+* To circumvent this, we started using contexts, and then finally Providers which allowed us to 
  specify what contexts the child level components expected without having to pass through as props 
  through multiple levels of components. 
- * However, we realized a common pattern in that many of the components which were passing down 
+* However, we realized a common pattern in that many of the components which were passing down 
  state and dispatchers as props needed were doing similar things. Getting the state/store from the 
  context when they mount, removing it when they unmount and specifying the contexts they wanted to receive. 
  Also contexts themselves are not highly recommended as discussed in the previous lessons. 
- * Hence, finally, we use the connect method from react-redux that takes care of all the things, 
+* Hence, finally, we use the connect method from react-redux that takes care of all the things, 
  and we just need to create the map of the state and dispatchers that we need to pass as props to lower 
  level components and connect them to the right component. This reduces a lot of boiler plate and also 
  reduces the chance of error. 
