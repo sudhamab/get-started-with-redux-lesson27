@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
 import todoApp from './reducers'
-import { Provider } from 'react-redux'
+import { connect, Provider } from 'react-redux'
  
 const Link = ({
   active,
@@ -142,62 +142,41 @@ const Todo = ({
 
 
 /*
-** Note that VisibleTodoList is not a functional 
-** component because functional components do not 
-** have access to the lifeCycle methods that 
-** React Components have. 
+**
 */ 
-class VisibleTodoList extends Component {
 
-  componentDidMount() {
-    /* take it from context instead of store */
-    const { store } = this.context; 
-    this.unsubscribe = store.subscribe(() =>
-      this.forceUpdate()
-    );
-  }
+const mapStateToProps = ( state ) = > {
+  return {
+    todos: getVisibleTodos(
+        state.todos,
+        state.visibilityFilter
+      )    
+  };
+};
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  render() {
-    const props = this.props;
-    const { store } = this.context;
-    const state = store.getState();
-
-    return (
-      <TodoList 
-        todos={
-          getVisibleTodos(
-            state.todos,
-            state.visibilityFilter
-          )
-        }
-        onTodoClick={id=>
-          store.dispatch({
-            type: 'TOGGLE_TODO',
-            id 
-          })
-        }
-      />  
-    )
-  }
-}
+const mapDispatchToProps = ( dispatch ) => {
+  return { 
+    onTodoClick: (id) => {
+      store.dispatch({
+        type: 'TOGGLE_TODO',
+        id 
+      })
+    }
+  };
+};
 
 /*
-** IMPORTANT:
-** The context is opt in for the receiving context so you have to 
-** specify  a special field called context types which are similar 
-** to Child Context types but we need to specify context types 
-** we want to receive and not pass down.
-** IF you forget to specify the context types, the component will 
-** not receive the context
+** This is where the brilliance is 
+** The react-redux connect allows you to link 
+** the props and the dispatchers you need to link to 
+** to a component and you dont need to specify the 
+** contextTypes etc.
 */ 
+const VisibleTodoList = connect(
+  mapStateToProps, 
+  mapDispatchToProps
+)(TodoList);
 
-VisibleTodoList.contextTypes = {
-  store: React.PropTypes.object
-}
 
 
 /*
